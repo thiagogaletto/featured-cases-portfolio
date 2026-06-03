@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Featured Cases · Thiago Galetto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #0B1A2B;
+    --navy2:   #112236;
+    --navy3:   #162C45;
+    --blue:    #1D6FA4;
+    --accent:  #4DB8FF;
+    --gold:    #C9A84C;
+    --text:    #E8EEF4;
+    --muted:   #7A92A8;
+    --border:  rgba(77,184,255,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── GRID TEXTURE ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(77,184,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77,184,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 80px 5vw 60px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .pills {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.03);
+  }
+
+  /* ─── GRID ─── */
+  .cases-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    padding: 2px;
+    max-width: 1200px;
+    margin: 60px auto 0;
+  }
+
+  /* ─── CASE CARD ─── */
+  .case-card {
+    position: relative;
+    background: var(--navy2);
+    padding: 40px 36px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+
+  .case-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .case-card:hover { background: var(--navy3); }
+  .case-card:hover::before { transform: scaleX(1); }
+
+  .case-card:hover .arrow { transform: translate(4px, -4px); }
+
+  .card-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--card-accent, var(--accent));
+    margin-bottom: 18px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 28px;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .meta-tag {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+
+  .card-cta {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--card-accent, var(--accent));
+  }
+
+  .arrow {
+    width: 20px;
+    height: 20px;
+    color: var(--card-accent, var(--accent));
+    transition: transform 0.3s ease;
+  }
+
+  /* ─── CARD ACCENT COLORS ─── */
+  .card-nokia   { --card-accent: #4DB8FF; }
+  .card-mktg    { --card-accent: #36D9A0; }
+  .card-auto    { --card-accent: #A78BFA; }
+  .card-rd      { --card-accent: #FB923C; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 60px 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  footer p { font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  header { animation: fadeUp 0.7s ease both; }
+  .case-card:nth-child(1) { animation: fadeUp 0.7s 0.1s ease both; }
+  .case-card:nth-child(2) { animation: fadeUp 0.7s 0.2s ease both; }
+  .case-card:nth-child(3) { animation: fadeUp 0.7s 0.3s ease both; }
+  .case-card:nth-child(4) { animation: fadeUp 0.7s 0.4s ease both; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="label">Thiago Galetto · Senior Data Analyst</span>
+  <h1>Featured <span>Cases</span></h1>
+  <p class="subtitle">Projetos profissionais selecionados em Business Analytics, BI e Data Intelligence — transformando dados fragmentados em decisões estruturadas.</p>
+  <div class="pills">
+    <span class="pill">10+ anos</span>
+    <span class="pill">Business Analytics</span>
+    <span class="pill">BI · KPIs · Dashboards</span>
+    <span class="pill">Decision Support</span>
+  </div>
+</header>
+
+<div class="cases-grid">
+
+  <!-- NOKIA -->
+  <a class="case-card card-nokia" href="nokia/index.html">
+    <span class="card-tag">Global · Compliance</span>
+    <h2 class="card-title">From Logistics to Data Governance</h2>
+    <p class="card-desc">Governança global de ativos críticos de teste e medição em ambiente multinacional de telecom. Rastreabilidade, compliance e visibilidade operacional ponta a ponta.</p>
+    <div class="card-meta">
+      <span class="meta-tag">Nokia</span>
+      <span class="meta-tag">Asset Intelligence</span>
+      <span class="meta-tag">Governance</span>
+      <span class="meta-tag">Global</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-cta">Ver case</span>
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </div>
+  </a>
+
+  <!-- MARKETING ANALYTICS -->
+  <a class="case-card card-mktg" href="marketing/index.html">
+    <span class="card-tag">Marketing · Performance</span>
+    <h2 class="card-title">Marketing Analytics &amp; Decision Support</h2>
+    <p class="card-desc">Dados fragmentados de marketing convertidos em visibilidade estratégica. KPIs, dashboards executivos e reporting para Toyota, Lexus, BRF, Colgate e outras marcas.</p>
+    <div class="card-meta">
+      <span class="meta-tag">Toyota · Lexus</span>
+      <span class="meta-tag">BRF · Colgate</span>
+      <span class="meta-tag">KPI Strategy</span>
+      <span class="meta-tag">Social Listening</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-cta">Ver case</span>
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </div>
+  </a>
+
+  <!-- AUTOMATION -->
+  <a class="case-card card-auto" href="automation/index.html">
+    <span class="card-tag">Automation · Data</span>
+    <h2 class="card-title">Automation &amp; Data Integration</h2>
+    <p class="card-desc">Workflows analíticos automatizados integrando CRM, mídia paga e performance em ambientes de reporting executivo. Menos fricção operacional, mais velocidade de decisão.</p>
+    <div class="card-meta">
+      <span class="meta-tag">Apps Script</span>
+      <span class="meta-tag">APIs · Webhooks</span>
+      <span class="meta-tag">Reporting</span>
+      <span class="meta-tag">ETL</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-cta">Ver case</span>
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </div>
+  </a>
+
+  <!-- RD STATION -->
+  <a class="case-card card-rd" href="rdstation/index.html">
+    <span class="card-tag">CRM · Funil</span>
+    <h2 class="card-title">RD Station Marketing Automation</h2>
+    <p class="card-desc">Pipeline de dados integrando RD Station, Google Analytics, Meta Ads e Google Ads em dashboards executivos. De leads fragmentados a visibilidade de funil consolidada.</p>
+    <div class="card-meta">
+      <span class="meta-tag">RD Station</span>
+      <span class="meta-tag">Google Analytics</span>
+      <span class="meta-tag">Meta Ads</span>
+      <span class="meta-tag">Looker Studio</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-cta">Ver case</span>
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  <p>
+    <a href="https://linkedin.com/in/thiagogaletto" target="_blank">LinkedIn</a> &nbsp;·&nbsp;
+    <a href="https://github.com/thiagogaletto" target="_blank">GitHub</a>
+  </p>
+  <p style="margin-top:10px;">Thiago Galetto · Senior Data Analyst · São Paulo, Brasil</p>
+</footer>
+
+</body>
+</html>
