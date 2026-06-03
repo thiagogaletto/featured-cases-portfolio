@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Analytics &amp; Decision Support · Thiago Galetto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #071A14;
+    --navy2:   #0C2219;
+    --navy3:   #112A1F;
+    --navy4:   #173326;
+    --green:   #36D9A0;
+    --green2:  #1BB077;
+    --text:    #DFF2EB;
+    --muted:   #5E9B82;
+    --border:  rgba(54,217,160,0.10);
+    --ok:      #36D9A0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(54,217,160,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(54,217,160,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .back {
+    position: relative; z-index: 2;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 20px 5vw;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; transition: color 0.2s;
+  }
+  .back:hover { color: var(--green); }
+  .back svg { width: 14px; height: 14px; }
+
+  .hero {
+    position: relative; z-index: 1;
+    padding: 40px 5vw 70px;
+    border-bottom: 1px solid var(--border);
+    max-width: 960px; margin: 0 auto;
+  }
+
+  .hero-env {
+    display: inline-block;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid rgba(54,217,160,0.25);
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+    font-weight: 800; line-height: 1.08; margin-bottom: 12px;
+  }
+
+  .hero h1 em { font-style: normal; color: var(--green); }
+
+  .hero-sub {
+    font-size: 1.05rem; color: var(--muted); font-style: italic; margin-bottom: 20px;
+  }
+
+  .brands-row {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand-pill {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 3px;
+    background: rgba(54,217,160,0.07);
+    border: 1px solid rgba(54,217,160,0.15);
+    color: var(--green);
+  }
+
+  .hero-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-pill {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 3px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .content {
+    position: relative; z-index: 1;
+    max-width: 960px; margin: 0 auto; padding: 0 5vw 80px;
+  }
+
+  .section-title {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin: 60px 0 24px;
+  }
+  .section-title::before {
+    content: ''; width: 3px; height: 16px;
+    background: var(--green); border-radius: 2px; flex-shrink: 0;
+  }
+
+  /* ─── CASE FLOW ─── */
+  .case-flow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2px;
+  }
+
+  .flow-block {
+    background: var(--navy2);
+    padding: 28px;
+  }
+
+  .flow-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800;
+    color: rgba(54,217,160,0.15);
+    line-height: 1; margin-bottom: 6px;
+  }
+
+  .flow-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 14px;
+  }
+
+  .flow-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem; font-weight: 800;
+    color: var(--text); margin-bottom: 16px;
+  }
+
+  .flow-block ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .flow-block li {
+    font-size: 0.85rem; color: var(--muted); line-height: 1.5;
+    padding-left: 14px; position: relative;
+  }
+  .flow-block li::before { content: '·'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+
+  /* ─── BRANDS GRID ─── */
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 2px;
+  }
+
+  .brand-card {
+    background: var(--navy2);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .brand-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700; color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .brand-sector {
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+
+  /* ─── COMPETÊNCIAS ─── */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+  }
+
+  .comp-block {
+    background: var(--navy2); padding: 24px;
+  }
+
+  .comp-icon { font-size: 1.5rem; margin-bottom: 10px; }
+
+  .comp-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem; font-weight: 700; color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .comp-desc {
+    font-size: 0.8rem; color: var(--muted); line-height: 1.6;
+  }
+
+  /* ─── IMPACT ─── */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+  }
+
+  .impact-card {
+    background: var(--navy2); padding: 24px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+
+  .impact-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(54,217,160,0.12);
+    border: 1px solid rgba(54,217,160,0.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .impact-check svg { width: 10px; height: 10px; color: var(--ok); }
+
+  .impact-text { font-size: 0.875rem; color: var(--text); line-height: 1.55; }
+  .impact-text strong { color: var(--ok); font-weight: 500; }
+
+  /* ─── TAKEAWAY ─── */
+  .takeaway {
+    background: var(--navy3);
+    border: 1px solid rgba(54,217,160,0.18);
+    border-left: 4px solid var(--green);
+    padding: 28px 32px; margin-top: 48px;
+  }
+  .takeaway p { font-size: 1rem; font-style: italic; color: var(--text); line-height: 1.7; }
+  .takeaway strong { color: var(--green); font-style: normal; }
+
+  /* ─── CAPS ─── */
+  .caps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .cap-badge {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 3px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border); color: var(--muted);
+  }
+
+  footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 40px 20px;
+    border-top: 1px solid var(--border);
+  }
+  footer p { font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
+  footer a { color: var(--green); text-decoration: none; font-weight: 500; }
+  footer a:hover { text-decoration: underline; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero        { animation: fadeUp 0.6s ease both; }
+  .case-flow   { animation: fadeUp 0.6s 0.1s ease both; }
+  .brands-grid { animation: fadeUp 0.6s 0.2s ease both; }
+  .comp-grid   { animation: fadeUp 0.6s 0.25s ease both; }
+  .impact-grid { animation: fadeUp 0.6s 0.3s ease both; }
+  .takeaway    { animation: fadeUp 0.6s 0.35s ease both; }
+</style>
+</head>
+<body>
+
+<a class="back" href="../index.html">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  Todos os cases
+</a>
+
+<div class="hero">
+  <span class="hero-env">Featured Case · Marketing Analytics · Senior Data Analyst</span>
+  <h1>Marketing Analytics &amp;<br><em>Decision Support</em></h1>
+  <p class="hero-sub">Dados fragmentados de marketing transformados em visibilidade estratégica</p>
+
+  <div class="brands-row">
+    <span class="brand-pill">Toyota</span>
+    <span class="brand-pill">Lexus</span>
+    <span class="brand-pill">Ipiranga</span>
+    <span class="brand-pill">AmPm</span>
+    <span class="brand-pill">Playstation</span>
+    <span class="brand-pill">Reebok</span>
+    <span class="brand-pill">BRF</span>
+    <span class="brand-pill">Colgate</span>
+    <span class="brand-pill">Grupo CRM</span>
+  </div>
+
+  <div class="hero-pills">
+    <span class="hero-pill">Business Intelligence</span>
+    <span class="hero-pill">KPI Strategy</span>
+    <span class="hero-pill">Executive Dashboards</span>
+    <span class="hero-pill">Social Listening</span>
+    <span class="hero-pill">Decision Support</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="section-title">Estrutura do Case</div>
+
+  <div class="case-flow">
+    <div class="flow-block">
+      <div class="flow-num">01</div>
+      <p class="flow-label">Contexto</p>
+      <h3 class="flow-title">Desafio</h3>
+      <ul>
+        <li>Fontes desconectadas entre mídia, social listening, CRM e canais digitais</li>
+        <li>KPIs inconsistentes e reportes dispersos</li>
+        <li>Baixa visibilidade de performance</li>
+        <li>Falta de leitura executiva consolidada</li>
+        <li>Reportes manuais e alto esforço operacional</li>
+      </ul>
+    </div>
+    <div class="flow-block">
+      <div class="flow-num">02</div>
+      <p class="flow-label">Abordagem</p>
+      <h3 class="flow-title">Ação</h3>
+      <ul>
+        <li>Dashboards executivos e frameworks de KPI</li>
+        <li>Consolidação de múltiplas fontes em visão única</li>
+        <li>Social listening e análise de jornada do cliente</li>
+        <li>Automação de reportes recorrentes</li>
+        <li>Storytelling de performance para stakeholders</li>
+      </ul>
+    </div>
+    <div class="flow-block">
+      <div class="flow-num">03</div>
+      <p class="flow-label">Resultado</p>
+      <h3 class="flow-title">Impacto</h3>
+      <ul>
+        <li>Mais visibilidade sobre performance de marketing</li>
+        <li>KPIs e reportes estruturados e padronizados</li>
+        <li>Decisões de liderança mais rápidas e embasadas</li>
+        <li>Menos fragmentação e esforço manual</li>
+        <li>Leitura mais clara do cliente e do funil</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Marcas &amp; Indústrias Atendidas</div>
+
+  <div class="brands-grid">
+    <div class="brand-card">
+      <p class="brand-name">Toyota</p>
+      <p class="brand-sector">Automotivo</p>
+    </div>
+    <div class="brand-card">
+      <p class="brand-name">Lexus</p>
+      <p class="brand-sector">Automotivo Premium</p>
+    </div>
+    <div class="brand-card">
+      <p class="brand-name">Ipiranga · AmPm</p>
+      <p class="brand-sector">Energia · Varejo</p>
+    </div>
+    <div class="brand-card">
+      <p class="brand-name">Playstation</p>
+      <p class="brand-sector">Tech · Gaming</p>
+    </div>
+    <div class="brand-card">
+      <p class="brand-name">Reebok</p>
+      <p class="brand-sector">Lifestyle · Esporte</p>
+    </div>
+    <div class="brand-card">
+      <p class="brand-name">BRF</p>
+      <p class="brand-sector">Alimentos</p>
+    </div>
+    <div class="brand-card">
+      <p class="brand-name">Colgate</p>
+      <p class="brand-sector">Consumer Goods</p>
+    </div>
+    <div class="brand-card">
+      <p class="brand-name">Grupo CRM</p>
+      <p class="brand-sector">CRM · Loyalty</p>
+    </div>
+  </div>
+
+  <div class="section-title">Competências Aplicadas</div>
+
+  <div class="comp-grid">
+    <div class="comp-block">
+      <div class="comp-icon">📊</div>
+      <p class="comp-title">Dashboards Executivos</p>
+      <p class="comp-desc">KPI frameworks e painéis para liderança com visibilidade consolidada de performance.</p>
+    </div>
+    <div class="comp-block">
+      <div class="comp-icon">🎯</div>
+      <p class="comp-title">Marketing Analytics</p>
+      <p class="comp-desc">Análise de mídia paga, performance de campanhas e comportamento do cliente.</p>
+    </div>
+    <div class="comp-block">
+      <div class="comp-icon">💬</div>
+      <p class="comp-title">Social Listening</p>
+      <p class="comp-desc">Inteligência de marcas e monitoramento de conversação digital para insights estratégicos.</p>
+    </div>
+    <div class="comp-block">
+      <div class="comp-icon">⚙️</div>
+      <p class="comp-title">Automação de Reportes</p>
+      <p class="comp-desc">Redução de esforço manual e padronização de fluxos analíticos recorrentes.</p>
+    </div>
+    <div class="comp-block">
+      <div class="comp-icon">🗺️</div>
+      <p class="comp-title">Jornada do Cliente</p>
+      <p class="comp-desc">Mapeamento de comportamento e sinais de CRM para visibilidade de funil.</p>
+    </div>
+    <div class="comp-block">
+      <div class="comp-icon">📢</div>
+      <p class="comp-title">Data Storytelling</p>
+      <p class="comp-desc">Comunicação analítica orientada a decisão para agências, liderança e stakeholders.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Impacto no Negócio</div>
+
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="impact-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <p class="impact-text"><strong>Maior visibilidade</strong> sobre performance de marketing e funil</p>
+    </div>
+    <div class="impact-card">
+      <div class="impact-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <p class="impact-text"><strong>KPIs e reportes estruturados</strong> e padronizados para múltiplas marcas</p>
+    </div>
+    <div class="impact-card">
+      <div class="impact-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <p class="impact-text"><strong>Decisões de liderança mais rápidas</strong> e baseadas em dados</p>
+    </div>
+    <div class="impact-card">
+      <div class="impact-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <p class="impact-text"><strong>Menos fragmentação</strong> e redução de esforço manual</p>
+    </div>
+    <div class="impact-card">
+      <div class="impact-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <p class="impact-text"><strong>Leitura mais clara do cliente</strong> e do comportamento digital</p>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <p>
+      <strong>Mensagem-Chave —</strong> Transformando sinais fragmentados de marketing em visibilidade estruturada para <strong>decisões de negócio mais inteligentes</strong>. Liderança não[...]
+    </p>
+  </div>
+
+  <div class="section-title">Ferramentas &amp; Competências</div>
+
+  <div class="caps">
+    <span class="cap-badge">Business Intelligence</span>
+    <span class="cap-badge">Marketing Analytics</span>
+    <span class="cap-badge">KPI Strategy</span>
+    <span class="cap-badge">Executive Dashboards</span>
+    <span class="cap-badge">Decision Support</span>
+    <span class="cap-badge">Customer Insights</span>
+    <span class="cap-badge">Social Listening</span>
+    <span class="cap-badge">Performance Reporting</span>
+    <span class="cap-badge">Power BI</span>
+    <span class="cap-badge">Looker Studio</span>
+    <span class="cap-badge">Google Analytics</span>
+  </div>
+
+</div>
+
+<footer>
+  <p>
+    <a href="https://linkedin.com/in/thiagogaletto" target="_blank">LinkedIn</a> &nbsp;·&nbsp;
+    <a href="https://github.com/thiagogaletto" target="_blank">GitHub</a> &nbsp;·&nbsp;
+    <a href="../index.html">← Todos os cases</a>
+  </p>
+  <p style="margin-top:10px;">Thiago Galetto · Senior Data Analyst · São Paulo, Brasil</p>
+</footer>
+
+</body>
+</html>
